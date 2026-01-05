@@ -1,10 +1,19 @@
 import os
+import sys
+
+# Add .pythonlibs to path if it exists
+lib_path = os.path.join(os.getcwd(), '.pythonlibs')
+if os.path.exists(lib_path):
+    for root, dirs, files in os.walk(lib_path):
+        if 'site-packages' in dirs:
+            sys.path.append(os.path.join(root, 'site-packages'))
+
 from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 
-app = Flask(__name__, static_folder='dist')
+app = Flask(__name__, static_folder='dist/public')
 CORS(app)
 
 # Database configuration
@@ -56,7 +65,7 @@ def clear_calculations():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
-    if path != "" and os.path.exists(app.static_folder + '/' + path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
@@ -64,4 +73,5 @@ def serve(path):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+    # Try to use port 5000, if busy it might fail but that is managed by the workflow
     app.run(host='0.0.0.0', port=5000)
