@@ -1,10 +1,10 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='dist')
 CORS(app)
 
 # Database configuration
@@ -29,7 +29,7 @@ class Calculation(db.Model):
             'createdAt': self.created_at.isoformat()
         }
 
-# Routes
+# API Routes
 @app.route('/api/calculations', methods=['GET'])
 def get_calculations():
     history = Calculation.query.order_by(Calculation.created_at.desc()).limit(50).all()
@@ -51,6 +51,15 @@ def clear_calculations():
     Calculation.query.delete()
     db.session.commit()
     return '', 204
+
+# Serve Frontend
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     with app.app_context():
