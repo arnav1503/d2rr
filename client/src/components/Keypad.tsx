@@ -1,88 +1,42 @@
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { Button } from './ui/button';
+import { Delete, RotateCcw } from 'lucide-react';
 
-interface KeypadProps {
-  onInput: (val: string) => void;
-  onClear: () => void;
-  onDelete: () => void;
-  onEqual: () => void;
-}
-
-export function Keypad({ onInput, onClear, onDelete, onEqual }: KeypadProps) {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05
-      }
-    }
-  };
-
-  const item = {
-    hidden: { y: 20, opacity: 0 },
-    show: { y: 0, opacity: 1 }
-  };
-
-  const Button = ({ 
-    label, 
-    onClick, 
-    className, 
-    variant = "default" 
-  }: { 
-    label: string | React.ReactNode, 
-    onClick: () => void, 
-    className?: string,
-    variant?: "default" | "primary" | "secondary" | "danger"
-  }) => (
-    <motion.button
-      variants={item}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={onClick}
-      className={cn(
-        "h-16 sm:h-20 rounded-2xl text-xl sm:text-2xl font-medium transition-colors select-none",
-        variant === "default" && "glass-button text-foreground/90",
-        variant === "primary" && "glass-button-primary font-bold text-2xl",
-        variant === "secondary" && "bg-secondary/50 hover:bg-secondary/70 text-primary-foreground",
-        variant === "danger" && "bg-destructive/20 hover:bg-destructive/30 text-destructive-foreground border border-destructive/20",
-        className
-      )}
-    >
-      {label}
-    </motion.button>
-  );
+export function Keypad({ onInput, onClear, onDelete, onEqual }: { onInput: (v: string) => void; onClear: () => void; onDelete: () => void; onEqual: () => void }) {
+  const keys = [
+    { label: 'C', action: onClear, variant: 'destructive', icon: RotateCcw },
+    { label: 'DEL', action: onDelete, variant: 'secondary', icon: Delete },
+    { label: '%', action: () => onInput('%'), variant: 'secondary' },
+    { label: '/', action: () => onInput('/'), variant: 'secondary' },
+    { label: '7', action: () => onInput('7') },
+    { label: '8', action: () => onInput('8') },
+    { label: '9', action: () => onInput('9') },
+    { label: '*', action: () => onInput('*'), variant: 'secondary' },
+    { label: '4', action: () => onInput('4') },
+    { label: '5', action: () => onInput('5') },
+    { label: '6', action: () => onInput('6') },
+    { label: '-', action: () => onInput('-'), variant: 'secondary' },
+    { label: '1', action: () => onInput('1') },
+    { label: '2', action: () => onInput('2') },
+    { label: '3', action: () => onInput('3') },
+    { label: '+', action: () => onInput('+'), variant: 'secondary' },
+    { label: '0', action: () => onInput('0'), className: 'col-span-1' },
+    { label: '.', action: () => onInput('.') },
+    { label: '=', action: onEqual, variant: 'default', className: 'col-span-2' },
+  ];
 
   return (
-    <motion.div 
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="grid grid-cols-4 gap-3 sm:gap-4 p-4"
-    >
-      <Button label="AC" onClick={onClear} variant="danger" className="text-red-400" />
-      <Button label="⌫" onClick={onDelete} variant="secondary" />
-      <Button label="%" onClick={() => onInput("%")} variant="secondary" />
-      <Button label="÷" onClick={() => onInput("/")} variant="secondary" className="text-primary font-bold" />
-
-      <Button label="7" onClick={() => onInput("7")} />
-      <Button label="8" onClick={() => onInput("8")} />
-      <Button label="9" onClick={() => onInput("9")} />
-      <Button label="×" onClick={() => onInput("*")} variant="secondary" className="text-primary font-bold" />
-
-      <Button label="4" onClick={() => onInput("4")} />
-      <Button label="5" onClick={() => onInput("5")} />
-      <Button label="6" onClick={() => onInput("6")} />
-      <Button label="-" onClick={() => onInput("-")} variant="secondary" className="text-primary font-bold" />
-
-      <Button label="1" onClick={() => onInput("1")} />
-      <Button label="2" onClick={() => onInput("2")} />
-      <Button label="3" onClick={() => onInput("3")} />
-      <Button label="+" onClick={() => onInput("+")} variant="secondary" className="text-primary font-bold" />
-
-      <Button label="0" onClick={() => onInput("0")} className="col-span-2" />
-      <Button label="." onClick={() => onInput(".")} />
-      <Button label="=" onClick={onEqual} variant="primary" />
-    </motion.div>
+    <div className='grid grid-cols-4 gap-3 p-6'>
+      {keys.map((key, i) => (
+        <Button
+          key={i}
+          variant={(key.variant as any) || 'ghost'}
+          onClick={key.action}
+          className={key.className}
+          size='lg'
+        >
+          {key.icon ? <key.icon className='h-5 w-5' /> : key.label}
+        </Button>
+      ))}
+    </div>
   );
 }

@@ -1,19 +1,19 @@
-import { Switch, Route } from "wouter";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import Calculator from "@/pages/Calculator";
-import NotFound from "@/pages/not-found";
+import { Switch, Route } from 'wouter';
+import { Toaster } from './components/ui/toaster';
+import { TooltipProvider } from './components/ui/tooltip';
+import Calculator from './pages/Calculator';
+import NotFound from './pages/not-found';
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Calculator} />
+      <Route path='/' component={Calculator} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-function App() {
+export default function App() {
   return (
     <TooltipProvider>
       <Router />
@@ -21,5 +21,3 @@ function App() {
     </TooltipProvider>
   );
 }
-
-export default App;
