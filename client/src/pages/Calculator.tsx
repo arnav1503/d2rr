@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import * as math from 'mathjs';
 import { Display } from '../components/Display';
 import { Keypad } from '../components/Keypad';
