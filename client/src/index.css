@@ -9,34 +9,35 @@
   --font-body: 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Dark mode inspired palette - Sleek & Modern */
-  --background: 224 71% 4%;
-  --foreground: 213 31% 91%;
+  /* Refined Midnight Glass Palette */
+  --background: 224 71% 2%;
+  --foreground: 213 31% 95%;
   
-  --card: 224 71% 7%;
-  --card-foreground: 213 31% 91%;
+  --card: 224 71% 4%;
+  --card-foreground: 213 31% 95%;
   
-  --popover: 224 71% 4%;
-  --popover-foreground: 215 20.2% 65.1%;
+  --popover: 224 71% 2%;
+  --popover-foreground: 215 20.2% 70%;
   
-  --primary: 263 70% 50%;
+  --primary: 263 70% 55%;
   --primary-foreground: 210 40% 98%;
   
-  --secondary: 215 27.9% 16.9%;
+  --secondary: 215 27.9% 12%;
   --secondary-foreground: 210 40% 98%;
   
-  --muted: 215 27.9% 16.9%;
-  --muted-foreground: 215 20.2% 65.1%;
+  --muted: 215 27.9% 12%;
+  --muted-foreground: 215 20.2% 70%;
   
-  --accent: 263 70% 50%;
+  --accent: 263 70% 55%;
   --accent-foreground: 210 40% 98%;
   
-  --destructive: 0 62.8% 30.6%;
+  --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
   
-  --border: 215 27.9% 16.9%;
-  --input: 215 27.9% 16.9%;
-  --ring: 263 70% 50%;
+  --border: 215 27.9% 12%;
+  --input: 215 27.9% 12%;
+  --ring: 263 70% 55%;
+  --radius: 1.25rem;
 }
 
 @layer base {
@@ -44,29 +45,33 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-white;
     font-family: var(--font-body);
-  }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(263, 70%, 55%, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(217, 91%, 60%, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
   }
 }
 
-/* Glassmorphism Utilities */
 @layer utilities {
   .glass {
-    @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-xl;
+    @apply bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)];
   }
   
   .glass-button {
-    @apply bg-white/5 hover:bg-white/10 active:bg-white/15 backdrop-blur-md border border-white/5 transition-all duration-200;
+    @apply bg-white/5 hover:bg-white/10 active:scale-95 border border-white/5 transition-all duration-200 backdrop-blur-md;
   }
   
   .glass-button-primary {
-    @apply bg-primary/80 hover:bg-primary/90 active:bg-primary backdrop-blur-md border border-primary/20 text-white shadow-lg shadow-primary/20 transition-all duration-200;
+    @apply bg-primary/80 hover:bg-primary/90 active:scale-95 border border-primary/20 text-white shadow-lg shadow-primary/20 transition-all duration-200 backdrop-blur-md;
   }
 
   .text-glow {
-    text-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+    text-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+  }
+
+  .calculator-shadow {
+    box-shadow: 0 0 80px -20px rgba(0, 0, 0, 0.8), 0 0 40px -10px rgba(124, 58, 237, 0.1);
   }
 }

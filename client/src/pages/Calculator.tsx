@@ -89,23 +89,39 @@ export default function Calculator() {
   }, [handleInput, handleEqual]);
 
   return (
-    <div className='min-h-screen w-full bg-background flex items-center justify-center p-4 sm:p-8 font-body'>
+    <div className='min-h-screen w-full bg-background flex flex-col items-center justify-center p-4 sm:p-8 font-body overflow-x-hidden'>
       <div className='fixed inset-0 overflow-hidden pointer-events-none'>
-        <div className='absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px]' />
-        <div className='absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px]' />
+        <div className='absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] animate-pulse' />
+        <div className='absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/20 rounded-full blur-[120px] animate-pulse delay-700' />
       </div>
-      <div className='w-full max-w-lg z-10'>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <div className='glass rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl shadow-black/50'>
+
+      <div className='w-full max-w-lg z-10 flex flex-col gap-8'>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <div className='glass rounded-[2.5rem] overflow-hidden border border-white/10 calculator-shadow'>
             <Display expression={expression} result={displayValue} isError={isError} />
-            <div className='bg-card/50 backdrop-blur-md'>
+            <div className='bg-white/[0.02] backdrop-blur-3xl'>
               <Keypad onInput={handleInput} onClear={handleClear} onDelete={handleDelete} onEqual={handleEqual} />
             </div>
           </div>
-          <div className='mt-8 text-center'>
-            <p className='text-muted-foreground/40 text-sm font-medium tracking-widest uppercase'>Scientific Calculator</p>
-          </div>
         </motion.div>
+
+        <motion.footer 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 1 }}
+          className='text-center space-y-2'
+        >
+          <p className='text-muted-foreground/30 text-[10px] font-medium tracking-[0.3em] uppercase'>
+            Professional Scientific Engine
+          </p>
+          <p className='text-muted-foreground/60 text-xs font-light tracking-wide'>
+            CC Arnav Raj Singh .All rights are Reserved
+          </p>
+        </motion.footer>
       </div>
       <Toaster />
     </div>

@@ -26,14 +26,19 @@ export function Keypad({ onInput, onClear, onDelete, onEqual }: { onInput: (v: s
   ];
 
   return (
-    <div className='grid grid-cols-4 gap-3 p-6'>
+    <div className='grid grid-cols-4 gap-4 p-8'>
       {keys.map((key, i) => (
         <Button
           key={i}
           variant={(key.variant as any) || 'ghost'}
           onClick={key.action}
-          className={key.className}
-          size='lg'
+          className={`h-14 sm:h-16 text-lg font-medium transition-all duration-200 active:scale-90 rounded-2xl ${
+            !key.variant ? 'bg-white/5 hover:bg-white/10 border-white/5' : ''
+          } ${
+            key.variant === 'secondary' ? 'bg-white/10 hover:bg-white/15 text-white' : ''
+          } ${
+            key.variant === 'default' ? 'bg-primary/80 hover:bg-primary shadow-lg shadow-primary/20' : ''
+          } ${key.className || ''}`}
         >
           {key.icon ? <key.icon className='h-5 w-5' /> : key.label}
         </Button>
