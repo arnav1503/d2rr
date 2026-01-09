@@ -2,13 +2,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { Trash2, History, Clock } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useCalculations, useClearHistory } from "@/hooks/use-calculations";
 import { Button } from "@/components/ui/button";
+import type { Calculation } from "@/pages/Calculator";
 
-export function HistoryPanel() {
-  const { data: calculations, isLoading } = useCalculations();
-  const { mutate: clearHistory, isPending: isClearing } = useClearHistory();
+interface HistoryPanelProps {
+  history: Calculation[];
+  onClear: () => void;
+}
 
+export function HistoryPanel({ history, onClear }: HistoryPanelProps) {
   return (
     <div className="h-full flex flex-col glass rounded-3xl overflow-hidden border-0 bg-card/40">
       <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5 backdrop-blur-sm">
@@ -16,12 +18,11 @@ export function HistoryPanel() {
           <History className="w-5 h-5 text-primary" />
           <span>History</span>
         </div>
-        {calculations && calculations.length > 0 && (
+        {history.length > 0 && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => clearHistory()}
-            disabled={isClearing}
+            onClick={onClear}
             className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-8 px-2 transition-colors"
           >
             <Trash2 className="w-4 h-4 mr-2" />
@@ -31,12 +32,7 @@ export function HistoryPanel() {
       </div>
 
       <ScrollArea className="flex-1 p-4">
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center h-40 gap-3 text-muted-foreground">
-            <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-            <span className="text-sm">Loading history...</span>
-          </div>
-        ) : !calculations?.length ? (
+        {!history.length ? (
           <div className="flex flex-col items-center justify-center h-64 gap-3 text-muted-foreground/50">
             <Clock className="w-12 h-12 stroke-1 opacity-50" />
             <p className="text-sm">No recent calculations</p>
@@ -44,7 +40,7 @@ export function HistoryPanel() {
         ) : (
           <div className="space-y-3">
             <AnimatePresence initial={false}>
-              {calculations.map((calc, i) => (
+              {history.map((calc, i) => (
                 <motion.div
                   key={calc.id}
                   initial={{ opacity: 0, x: 20 }}
@@ -57,8 +53,11 @@ export function HistoryPanel() {
                     <span className="text-xs text-muted-foreground font-mono">
                       {calc.expression}
                     </span>
-                    {/* Only show date if it exists, though schema implies it might not be in select type if omitted */}
-                    {/* Assuming backend returns created_at based on schema */}
+                    {calc.createdAt && (
+                      <span className="text-[10px] text-muted-foreground/30">
+                        {format(new Date(calc.createdAt), "HH:mm")}
+                      </span>
+                    )}
                   </div>
                   <div className="text-right text-lg font-semibold text-foreground tracking-tight">
                     = {calc.result}
